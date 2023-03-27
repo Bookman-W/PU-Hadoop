@@ -1,0 +1,48 @@
+Apache Hadoop software is an open source framework that allows for the distributed storage and processing of large datasets across clusters of computers using simple programming models. Hadoop is designed to scale up from a single computer to thousands of clustered computers, with each machine offering local computation and storage. In this way, Hadoop can efficiently store and process large datasets ranging in size from gigabytes to petabytes of data.
+
+Learn about how to use Dataproc to run Apache Hadoop clusters, on Google Cloud, in a simpler, integrated, more cost-effective way.
+
+Apache Hadoop overview
+
+Four modules comprise the primary Hadoop framework and work collectively to form the Hadoop ecosystem:
+Hadoop Distributed File System (HDFS): As the primary component of the Hadoop ecosystem, HDFS is a distributed file system that provides high-throughput access to application data with no need for schemas to be defined up front.
+Yet Another Resource Negotiator (YARN): YARN is a resource-management platform responsible for managing compute resources in clusters and using them to schedule users’ applications. It performs scheduling and resource allocation across the Hadoop system.
+MapReduce: MapReduce is a programming model for large-scale data processing. Using distributed and parallel computation algorithms, MapReduce makes it possible to carry over processing logic and helps to write applications that transform big datasets into one manageable set.
+Hadoop Common: Hadoop Common includes the libraries and utilities used and shared by other Hadoop modules.
+
+All Hadoop modules are designed with a fundamental assumption that hardware failures of individual machines or racks of machines are common and should be automatically handled in software by the framework. The Apache Hadoop MapReduce and HDFS components were originally derived from Google MapReduce and Google File System (GFS) papers.
+
+Beyond HDFS, YARN, and MapReduce, the entire Hadoop open source ecosystem continues to grow and includes many tools and applications to help collect, store, process, analyze, and manage big data. These include Apache Pig, Apache Hive, Apache HBase, Apache Spark, Presto, and Apache Zeppelin.
+
+What are the benefits of Hadoop?
+
+Fault tolerance
+In the Hadoop ecosystem, even if individual nodes experience high rates of failure when running jobs on a large cluster, data is replicated across a cluster so that it can be recovered easily should disk, node, or rack failures occur.
+
+Cost control
+Hadoop controls costs by storing data more affordably per terabyte than other platforms. Instead of thousands to tens of thousands of dollars per terabyte being spent on hardware, Hadoop delivers compute and storage on affordable standard commodity hardware for hundreds of dollars per terabyte.
+
+Open source framework innovation
+Hadoop is backed by global communities united around introducing new concepts and capabilities faster and more effectively than internal teams working on proprietary solutions. The collective power of an open source community delivers more ideas, quicker development, and troubleshooting when issues arise, which translates into a faster time to market.
+
+Why do you need Hadoop?
+Apache Hadoop was born out of a need to more quickly and reliably process an avalanche of big data. Hadoop enables an entire ecosystem of open source software that data-driven companies are increasingly deploying to store and parse big data. Rather than rely on hardware to deliver critical high availability, Hadoop’s distributed nature is designed to detect and handle failures at the application layer, delivering a highly available service on top of a cluster of computers to reduce the risks of independent machine failures.
+
+Instead of using one large computer to store and process data, Hadoop uses clusters of multiple computers to analyze massive datasets in parallel. Hadoop can handle various forms of structured and unstructured data, which gives companies greater speed and flexibility for collecting, processing, and analyzing big data than can be achieved with relational databases and data warehouses.
+
+
+What is Apache Hadoop used for?
+
+Here are some common uses cases for Apache Hadoop:
+
+Analytics and big data
+A wide variety of companies and organizations use Hadoop for research, production data processing, and analytics that require processing terabytes or petabytes of big data, storing diverse datasets, and data parallel processing.
+
+Vertical industries
+Companies in myriad industries—including technology, education, healthcare, and financial services—rely on Hadoop for tasks that share a common theme of high variety, volume, and velocity of structured and unstructured data.
+
+AI and machine learning
+Hadoop ecosystems also play a key role in supporting the development of artificial intelligence and machine learning applications.
+
+Cloud computing
+Companies often choose to run Hadoop clusters on public, private, or hybrid cloud resources versus on-premises hardware to gain flexibility, availability, and cost control. Many cloud solution providers offer fully managed services for Hadoop, such as Dataproc from Google Cloud. With this kind of prepackaged service for cloud-native Hadoop, operations that used to take hours or days can be completed in seconds or minutes, with companies paying only for the resources used.
