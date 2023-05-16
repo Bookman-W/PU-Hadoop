@@ -1,4 +1,6 @@
 #!/bin/bash
+#Purpose: down 2022 DailyImmigPort data.
+#Create-Date: 2023-05-16
 
 # Text color setting
 NC="\033[0m" # Color reset
