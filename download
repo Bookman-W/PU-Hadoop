@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Text color setting
+NC="\033[0m" # Color reset
+BLACK="\033[0;30m"
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
+BLUE="\033[0;34m"
+PURPLE="\033[0;35m"
+CYAN="\033[0;36m"
+WHITE="\033[0;37m"
+
+dataset_list="
+https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=6D74C8E4-97EF-4219-9D1B-6E291A99960E
+https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=888AF141-D4F1-43BE-B8B2-491309A82CE8
+https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=1330994C-04E3-4530-B67A-A5739B5328F9
+https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=2C8CE2CB-AFEA-4E05-918B-F0143FAB33AC
+https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=CD6072F5-F2FC-4628-A766-143C4AE1B255
+https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=01CFF989-742E-4981-9D67-BFC4E06791C2
+https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=EF389AB7-A2AA-4AFF-9A1F-3C436D3FB6A9
+https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=F8D82744-1012-4352-9492-D77D466B6ED5
+https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=495F8B4D-2F4E-47A5-9486-1D766840EB26
+https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=57EBD173-95DC-4C2A-AFAD-C114C15C37D0
+https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=C274696E-12F0-46B2-B9BB-15F76D120C72
+https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=5749E0BA-12CE-45EA-8151-712C9275A444
+"
+
+date="202201"
+
+ls ~/2022_DailyImmigPort/{original-data,fix-data} &> /dev/null
+[ $? != 0 ] && mkdir -p ~/2022_DailyImmigPort/{original-data,fix-data}
+
+hdfs dfs -ls hive-work/2022_DailyImmigPort &> /dev/null
+[ $? != 0 ] && hdfs dfs -mkdir hive-work/2022_DailyImmigPort &> /dev/null || hdfs dfs -rm -r hive-work/2022_DailyImmigPort/* &> /dev/null
+
+for list in ${dataset_list}
+  do
+    wget "${list}" -O ~/2022_DailyImmigPort/${date}_DailyImmigPort.zip &> /dev/null
+    [ $? == 0 ] && echo -e " [${GREEN}●${NC}] ${date}_DailyImmigPort.zip download success." || echo -e " [${RED}●${NC}] ${date}_DailyImmigPort.zip download failed."
+    
+    target=$(unzip -l ~/2022_DailyImmigPort/${date}_DailyImmigPort.zip | grep "${date}" | tail -n 1 | awk '{ print $4 }')
+    unzip ~/2022_DailyImmigPort/${date}_DailyImmigPort.zip ${target} -d ~/2022_DailyImmigPort/original-data/ &> /dev/null
+    [ $? == 0 ] && echo -e " [${GREEN}●${NC}] ${date}_DailyImmigPort.zip unzip success." || echo -e " [${RED}●${NC}] ${date}_DailyImmigPort.zip unzip failed."
+    
+    ls ~/2022_DailyImmigPort/original-data/${target} &> /dev/null
+    [ $? == 0 ] && rm ~/2022_DailyImmigPort/${date}_DailyImmigPort.zip
+
+    cat ~/2022_DailyImmigPort/original-data/${target} | cut -d ',' -f 1,2,4,7 > ~/2022_DailyImmigPort/fix-data/${target}
+    #sed -i 's/日期,入出境總人數_小計,桃園一期出境查驗,桃園二期出境查驗/Date,Entry_and_Departure,TPE_Terminal_1,TPE_Terminal_2/g' ~/2022_DailyImmigPort/fix-data/${target}
+    sed -i '/日期,入出境總人數_小計,桃園一期出境查驗,桃園二期出境查驗/d' ~/2022_DailyImmigPort/fix-data/${target}
+
+    hdfs dfs -put ~/2022_DailyImmigPort/fix-data/${target} hive-work/2022_DailyImmigPort/${target}
+    [ $? == 0 ] && echo -e " [${GREEN}●${NC}] ${target} put success. || echo -e " [${RED}●${NC}] ${target} put failed.
+    date=$((${date}+1))
+    echo "---"
+  done
