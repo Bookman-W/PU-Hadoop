@@ -51,7 +51,7 @@ for list in ${dataset_list}
     sed -i '/日期,入出境總人數_小計,桃園一期出境查驗,桃園二期出境查驗/d' ~/2022_DailyImmigPort/fix-data/${target}
 
     hdfs dfs -put ~/2022_DailyImmigPort/fix-data/${target} hive-work/2022_DailyImmigPort/${target}
-    [ $? == 0 ] && echo -e " [${GREEN}●${NC}] ${target} put success. || echo -e " [${RED}●${NC}] ${target} put failed.
+    [ $? == 0 ] && echo -e " [${GREEN}●${NC}] ${target} put success." || echo -e " [${RED}●${NC}] ${target} put failed."
     date=$((${date}+1))
     echo "---"
   done
