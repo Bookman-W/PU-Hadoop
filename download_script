@@ -30,6 +30,9 @@ https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=5749E0BA-12CE-45EA-8
 
 date="202201"
 
+rm -r ~/2022_DailyImmigPort/{original-data,fix-data}
+hdfs dfs -rm -r hive-work/2022_DailyImmigPort
+
 ls ~/2022_DailyImmigPort/{original-data,fix-data} &> /dev/null
 [ $? != 0 ] && mkdir -p ~/2022_DailyImmigPort/{original-data,fix-data}
 
@@ -38,7 +41,7 @@ hdfs dfs -ls hive-work/2022_DailyImmigPort &> /dev/null
 
 for list in ${dataset_list}
   do
-    wget "${list}" -O ~/2022_DailyImmigPort/${date}_DailyImmigPort.zip &> /dev/null
+    wget "${list}" -O ~/2022_DailyImmigPort/${date}_DailyImmigPort.zip > /dev/null 2>&1
     [ $? == 0 ] && echo -e " [${GREEN}●${NC}] ${date}_DailyImmigPort.zip download success." || echo -e " [${RED}●${NC}] ${date}_DailyImmigPort.zip download failed."
     
     target=$(unzip -l ~/2022_DailyImmigPort/${date}_DailyImmigPort.zip | grep "${date}" | tail -n 1 | awk '{ print $4 }')
