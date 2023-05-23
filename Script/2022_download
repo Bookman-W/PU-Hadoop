@@ -30,8 +30,10 @@ https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=5749E0BA-12CE-45EA-8
 
 date="202201"
 
-rm -r ~/2022_DailyImmigPort/{original-data,fix-data}
-hdfs dfs -rm -r hive-work/2022_DailyImmigPort
+ls ~/2022_DailyImmigPort &> /dev/null
+[ $? == 0 ] && rm -r ~/2022_DailyImmigPort
+hdfs dfs -ls hive-work/2022_DailyImmigPort &> /dev/null
+[ $? == 0 ] && hdfs dfs -rm -r hive-work/2022_DailyImmigPort
 
 ls ~/2022_DailyImmigPort/{original-data,fix-data} &> /dev/null
 [ $? != 0 ] && mkdir -p ~/2022_DailyImmigPort/{original-data,fix-data}
