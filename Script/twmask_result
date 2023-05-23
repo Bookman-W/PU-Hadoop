@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Text color setting
+NC="\033[0m" # Color reset
+BLACK="\033[0;30m"
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
+BLUE="\033[0;34m"
+PURPLE="\033[0;35m"
+CYAN="\033[0;36m"
+WHITE="\033[0;37m"
+
+SQL_WHERE="WHERE code='2311040018'"
+#WHERE code='2311040018' AND dt LIKE '%2020/05/13%'
+
+echo -en "${GREEN}twmask file quantity: ${NC}"
+hdfs dfs -ls -h /data/twmask/* | grep -v 'Found' | wc -l
+echo -en "${GREEN}twmask execution time: ${NC}"
+ { time hive -S -e "SELECT * FROM twmask ${SQL_WHERE}" 2>/dev/null; } 2>&1 | grep real | awk '{ print $2 }'
+ echo "---"
+
+echo -en "${GREEN}twmask_compact file quantity: ${NC}"
+hdfs dfs -ls -h /data/twmask_compact/* | grep -v 'Found' | wc -l
+echo -en "${GREEN}twmask_compact execution time: ${NC}"
+ { time hive -S -e "SELECT * FROM twmask_compact ${SQL_WHERE}" 2>/dev/null; } 2>&1 | grep real | awk '{ print $2 }'
+ echo "---"
+
+echo -en "${GREEN}twmask_partition file quantity: ${NC}"
+hdfs dfs -ls -h /data/twmask_partition/* | grep -v 'Found' | wc -l
+echo -en "${GREEN}twmask_partition execution time: ${NC}"
+ { time hive -S -e "SELECT * FROM twmask_partition ${SQL_WHERE}" 2>/dev/null; } 2>&1 | grep real | awk '{ print $2 }'
+ echo "---"
+
+echo -en "${GREEN}twmask_parquet file quantity: ${NC}"
+hdfs dfs -ls -h /data/twmask_parquet/* | grep -v 'Found' | wc -l
+echo -en "${GREEN}twmask_parquet execution time: ${NC}"
+ { time hive -S -e "SELECT * FROM twmask_parquet ${SQL_WHERE}" 2>/dev/null; } 2>&1 | grep real | awk '{ print $2 }'
+ echo "---"
+
+echo -en "${GREEN}twmask_pp file quantity: ${NC}"
+hdfs dfs -ls -h /data/twmask_pp/* | grep -v 'Found' | wc -l
+echo -en "${GREEN}twmask_pp execution time: ${NC}"
+{ time hive -S -e "SELECT * FROM twmask_pp ${SQL_WHERE}" 2>/dev/null; } 2>&1 | grep real | awk '{ print $2 }'

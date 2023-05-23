@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Text color setting
+NC="\033[0m" # Color reset
+BLACK="\033[0;30m"
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
+BLUE="\033[0;34m"
+PURPLE="\033[0;35m"
+CYAN="\033[0;36m"
+WHITE="\033[0;37m"
+
+SQL_WHERE_1="WHERE Day LIKE '%202205%'"
+SQL_WHERE_2="WHERE Day month=5'"
+#WHERE code='2311040018' AND dt LIKE '%2020/05/13%'
+
+echo -en "${GREEN}2022_dailyimmigport file quantity: ${NC}"
+hdfs dfs -ls -h hive-work/2022_DailyImmigPort/* | grep -v 'Found' | wc -l
+echo -en "${GREEN}2022_dailyimmigport execution time: ${NC}"
+ { time hive -S -e "SELECT * FROM 2022_dailyimmigport ${SQL_WHERE_1}" 2>/dev/null; } 2>&1 | grep real | awk '{ print $2 }'
+echo "---"
+
+echo -en "${GREEN}2022_dailyimmigport_partition file quantity: ${NC}"
+hdfs dfs -ls -h hive-work/2022_DailyImmigPort_Partition/* | grep -v 'Found' | wc -l
+echo -en "${GREEN}2022_dailyimmigport_partition execution time: ${NC}"
+ { time hive -S -e "SELECT * FROM 2022_dailyimmigport_partition ${SQL_WHERE_2}" 2>/dev/null; } 2>&1 | grep real | awk '{ print $2 }'
+echo "---"
+
+echo -en "${GREEN}2022_dailyimmigport_parquet file quantity: ${NC}"
+hdfs dfs -ls -h hive-work/2022_DailyImmigPort_Parquet/* | grep -v 'Found' | wc -l
+echo -en "${GREEN}2022_dailyimmigport_parquet execution time: ${NC}"
+ { time hive -S -e "SELECT * FROM 2022_dailyimmigport_parquet ${SQL_WHERE_1}" 2>/dev/null; } 2>&1 | grep real | awk '{ print $2 }'
+echo "---"
+
+echo -en "${GREEN}2022_dailyimmigport_pp file quantity: ${NC}"
+hdfs dfs -ls -h hive-work/2022_DailyImmigPort_PP/* | grep -v 'Found' | wc -l
+echo -en "${GREEN}2022_dailyimmigport_pp execution time: ${NC}"
+{ time hive -S -e "SELECT * FROM 2022_dailyimmigport_pp ${SQL_WHERE_2}" 2>/dev/null; } 2>&1 | grep real | awk '{ print $2 }'
